@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.crypto.Cipher;
+
 /**
  * Created by amitshekhar on 13/11/17.
  */
@@ -36,12 +38,14 @@ public class DownloadRequestBuilder implements RequestBuilder {
     int readTimeout;
     int connectTimeout;
     String userAgent;
+    Cipher cipher;
     HashMap<String, List<String>> headerMap;
 
-    public DownloadRequestBuilder(String url, String dirPath, String fileName) {
+    public DownloadRequestBuilder(String url, String dirPath, String fileName, Cipher cipher) {
         this.url = url;
         this.dirPath = dirPath;
         this.fileName = fileName;
+        this.cipher = cipher;
     }
 
     @Override
@@ -87,6 +91,12 @@ public class DownloadRequestBuilder implements RequestBuilder {
     @Override
     public DownloadRequestBuilder setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+        return this;
+    }
+
+    @Override
+    public DownloadRequestBuilder setCipher(Cipher cipher) {
+        this.cipher = cipher;
         return this;
     }
 

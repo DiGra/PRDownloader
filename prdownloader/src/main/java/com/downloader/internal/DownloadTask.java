@@ -31,11 +31,16 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.SyncFailedException;
 import java.net.HttpURLConnection;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 
 /**
  * Created by amitshekhar on 13/11/17.
@@ -78,7 +83,7 @@ public class DownloadTask {
             return response;
         }
 
-        BufferedOutputStream outputStream = null;
+        FilterOutputStream outputStream = null;
 
         FileDescriptor fileDescriptor = null;
 
@@ -180,7 +185,11 @@ public class DownloadTask {
 
             RandomAccessFile randomAccess = new RandomAccessFile(file, "rw");
             fileDescriptor = randomAccess.getFD();
-            outputStream = new BufferedOutputStream(new FileOutputStream(randomAccess.getFD()));
+            if (request.getCipher() != null) {
+                outputStream = new CipherOutputStream(new FileOutputStream(randomAccess.getFD()), request.getCipher());
+            } else {
+                outputStream = new BufferedOutputStream(new FileOutputStream(randomAccess.getFD()));
+            }
 
             if (isResumeSupported && request.getDownloadedBytes() != 0) {
                 randomAccess.seek(request.getDownloadedBytes());
@@ -317,7 +326,7 @@ public class DownloadTask {
         }
     }
 
-    private void syncIfRequired(BufferedOutputStream outputStream, FileDescriptor fileDescriptor) throws IOException {
+    private void syncIfRequired(FilterOutputStream outputStream, FileDescriptor fileDescriptor) throws IOException {
         final long currentBytes = request.getDownloadedBytes();
         final long currentTime = System.currentTimeMillis();
         final long bytesDelta = currentBytes - lastSyncBytes;
@@ -329,7 +338,7 @@ public class DownloadTask {
         }
     }
 
-    private void sync(BufferedOutputStream outputStream, FileDescriptor fileDescriptor) {
+    private void sync(FilterOutputStream outputStream, FileDescriptor fileDescriptor) {
         boolean success;
         try {
             outputStream.flush();
@@ -348,7 +357,7 @@ public class DownloadTask {
 
     }
 
-    private void closeAllSafely(BufferedOutputStream outputStream, FileDescriptor fileDescriptor) {
+    private void closeAllSafely(FilterOutputStream outputStream, FileDescriptor fileDescriptor) {
         if (httpClient != null) {
             try {
                 httpClient.close();
@@ -387,5 +396,4 @@ public class DownloadTask {
                 }
         }
     }
-
 }

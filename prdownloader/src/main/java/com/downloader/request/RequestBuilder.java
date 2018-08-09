@@ -18,6 +18,8 @@ package com.downloader.request;
 
 import com.downloader.Priority;
 
+import javax.crypto.Cipher;
+
 /**
  * Created by amitshekhar on 13/11/17.
  */
@@ -35,5 +37,7 @@ public interface RequestBuilder {
     RequestBuilder setConnectTimeout(int connectTimeout);
 
     RequestBuilder setUserAgent(String userAgent);
+
+    RequestBuilder setCipher(Cipher cipher);
 
 }

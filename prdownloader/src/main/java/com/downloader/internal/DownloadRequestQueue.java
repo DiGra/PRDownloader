@@ -97,7 +97,7 @@ public class DownloadRequestQueue {
                 if (tempRequestTag.equals(tempTag)) {
                     cancelAndRemoveFromMap(request);
                 }
-            } else if (request.getTag().equals(tag)) {
+            } else if (request.getTag() != null && request.getTag().equals(tag)) {
                 cancelAndRemoveFromMap(request);
             }
         }

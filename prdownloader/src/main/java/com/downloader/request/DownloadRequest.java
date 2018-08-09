@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import javax.crypto.Cipher;
+
 /**
  * Created by amitshekhar on 13/11/17.
  */
@@ -61,6 +63,7 @@ public class DownloadRequest {
     private int downloadId;
     private HashMap<String, List<String>> headerMap;
     private Status status;
+    private Cipher cipher = null;
 
     DownloadRequest(DownloadRequestBuilder builder) {
         this.url = builder.url;
@@ -78,6 +81,7 @@ public class DownloadRequest {
                         builder.connectTimeout :
                         getConnectTimeoutFromConfig();
         this.userAgent = builder.userAgent;
+        this.cipher = builder.cipher;
     }
 
     public Priority getPriority() {
@@ -138,6 +142,14 @@ public class DownloadRequest {
 
     public void setFuture(Future future) {
         this.future = future;
+    }
+
+    public Cipher getCipher() {
+        return cipher;
+    }
+
+    public void setCipher(Cipher cipher) {
+        this.cipher = cipher;
     }
 
     public long getDownloadedBytes() {

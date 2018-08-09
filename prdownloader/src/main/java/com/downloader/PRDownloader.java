@@ -28,6 +28,8 @@ import com.downloader.internal.DownloadRequestQueue;
 import com.downloader.request.DownloadRequestBuilder;
 import com.downloader.utils.Utils;
 
+import javax.crypto.Cipher;
+
 /**
  * PRDownloader entry point.
  * You must initialize this class before use. The simplest way is to just do
@@ -69,8 +71,8 @@ public class PRDownloader {
      * @param fileName The file name with which file is to be saved
      * @return the DownloadRequestBuilder
      */
-    public static DownloadRequestBuilder download(String url, String dirPath, String fileName) {
-        return new DownloadRequestBuilder(url, dirPath, fileName);
+    public static DownloadRequestBuilder download(String url, String dirPath, String fileName, Cipher cipher) {
+        return new DownloadRequestBuilder(url, dirPath, fileName, cipher);
     }
 
     /**
