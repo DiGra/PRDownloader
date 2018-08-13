@@ -246,6 +246,7 @@ public class DownloadTask {
             }
             Error error = new Error();
             error.setConnectionError(true);
+            error.setException(e);
             response.setError(error);
         } finally {
             closeAllSafely(outputStream, fileDescriptor);
