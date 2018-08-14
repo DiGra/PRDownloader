@@ -203,6 +203,9 @@ public class DownloadTask {
                 return response;
             }
 
+            int partCount = 1;
+            long partLenght = totalBytes / 100;
+
             do {
 
                 final int byteCount = inputStream.read(buff, 0, BUFFER_SIZE);
@@ -215,7 +218,10 @@ public class DownloadTask {
 
                 request.setDownloadedBytes(request.getDownloadedBytes() + byteCount);
 
-                sendProgress();
+                if (request.getDownloadedBytes() > partLenght * partCount) {
+                    sendProgress();
+                    partCount++;
+                }
 
                 syncIfRequired(outputStream, fileDescriptor);
 
