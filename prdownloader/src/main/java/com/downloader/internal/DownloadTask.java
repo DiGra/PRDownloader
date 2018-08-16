@@ -186,9 +186,9 @@ public class DownloadTask {
             RandomAccessFile randomAccess = new RandomAccessFile(file, "rw");
             fileDescriptor = randomAccess.getFD();
             if (request.getCipher() != null) {
-                outputStream = new CipherOutputStream(new FileOutputStream(randomAccess.getFD()), request.getCipher());
+                outputStream = new CipherOutputStream(new FileOutputStream(file), request.getCipher());
             } else {
-                outputStream = new BufferedOutputStream(new FileOutputStream(randomAccess.getFD()));
+                outputStream = new BufferedOutputStream(new FileOutputStream(file));
             }
 
             if (isResumeSupported && request.getDownloadedBytes() != 0) {
