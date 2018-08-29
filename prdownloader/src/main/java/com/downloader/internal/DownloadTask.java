@@ -186,9 +186,9 @@ public class DownloadTask {
             RandomAccessFile randomAccess = new RandomAccessFile(file, "rw");
             fileDescriptor = randomAccess.getFD();
             if (request.getCipher() != null) {
-                outputStream = new CipherOutputStream(new FileOutputStream(randomAccess.getFD()), request.getCipher());
+                outputStream = new CipherOutputStream(new FileOutputStream(file), request.getCipher());
             } else {
-                outputStream = new BufferedOutputStream(new FileOutputStream(randomAccess.getFD()));
+                outputStream = new BufferedOutputStream(new FileOutputStream(file));
             }
 
             if (isResumeSupported && request.getDownloadedBytes() != 0) {
@@ -203,6 +203,9 @@ public class DownloadTask {
                 return response;
             }
 
+            int partCount = 1;
+            long partLenght = totalBytes / 100;
+
             do {
 
                 final int byteCount = inputStream.read(buff, 0, BUFFER_SIZE);
@@ -215,7 +218,10 @@ public class DownloadTask {
 
                 request.setDownloadedBytes(request.getDownloadedBytes() + byteCount);
 
-                sendProgress();
+                if (request.getDownloadedBytes() > partLenght * partCount) {
+                    sendProgress();
+                    partCount++;
+                }
 
                 syncIfRequired(outputStream, fileDescriptor);
 
