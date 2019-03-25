@@ -24,6 +24,7 @@ public class Error {
 
     private boolean isServerError;
     private boolean isConnectionError;
+    private int responseCode;
     private Exception exception;
 
     public boolean isServerError() {
@@ -48,5 +49,13 @@ public class Error {
 
     public void setException(Exception exception) {
         this.exception = exception;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 }

@@ -129,6 +129,7 @@ public class DownloadTask {
             if (!isSuccessful()) {
                 Error error = new Error();
                 error.setServerError(true);
+                error.setResponseCode(responseCode);
                 response.setError(error);
                 return response;
             }
@@ -239,6 +240,7 @@ public class DownloadTask {
             }
             Error error = new Error();
             error.setConnectionError(true);
+            error.setResponseCode(responseCode);
             error.setException(e);
             response.setError(error);
         } finally {
